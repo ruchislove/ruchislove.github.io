@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Mother's Day 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --bg:       #1a0a12;
+  --bg2:      #2a1020;
+  --bg3:      #3d1830;
+  --gold:     #d4a843;
+  --gold-l:   #f0cf85;
+  --gold-d:   #a07828;
+  --rose:     #e8607a;
+  --rose-l:   #f9b8c4;
+  --rose-d:   #b03050;
+  --cream:    #fdf6ee;
+  --lavender: #c8a8d8;
+  --mint:     #7dd4b8;
+  --text:     #fdf6ee;
+  --text-m:   rgba(253,246,238,0.65);
+  --text-s:   rgba(253,246,238,0.4);
+}
+
+body{
+  font-family:'Josefin Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ══════════════ PAGE SYSTEM ══════════════ */
+.page{
+  display:none;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+.page.active{display:flex;flex-direction:column;}
+.page.fade-in{animation:fadeIn 0.9s ease forwards;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+
+/* ══════════════ STARFIELD BG ══════════════ */
+.stars{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 20% 20%, #2d0f1f 0%, #0d0508 60%);
+  overflow:hidden;
+}
+.stars::before,.stars::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,240,220,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 40%, rgba(255,240,220,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,240,220,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,240,220,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 25%, rgba(255,240,220,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,240,220,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 70%, rgba(255,240,220,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 80% 85%, rgba(255,240,220,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 45%, rgba(255,240,220,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 55%, rgba(255,240,220,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 15%, rgba(255,240,220,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 5% 45%, rgba(255,240,220,0.3) 0%, transparent 100%);
+  animation:twinkle 4s ease-in-out infinite alternate;
+}
+.stars::after{animation-delay:2s;animation-duration:3s;}
+@keyframes twinkle{0%{opacity:0.7}100%{opacity:1}}
+
+/* Petals floating */
+.petal{
+  position:fixed;pointer-events:none;z-index:1;
+  font-size:1.2rem;
+  animation:petalFall linear infinite;
+  opacity:0;
+}
+@keyframes petalFall{
+  0%{transform:translateY(-50px) rotate(0deg) translateX(0);opacity:0}
+  10%{opacity:0.7}
+  90%{opacity:0.5}
+  100%{transform:translateY(110vh) rotate(360deg) translateX(40px);opacity:0}
+}
+
+/* ══════════════ LANDING PAGE ══════════════ */
+#page-landing{
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:2rem 1.5rem;
+  gap:0;
+}
+
+.landing-moon{
+  font-size:4rem;margin-bottom:1rem;
+  animation:floatGlow 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(212,168,67,0.6));
+}
+@keyframes floatGlow{
+  0%,100%{transform:translateY(0);filter:drop-shadow(0 0 20px rgba(212,168,67,0.6))}
+  50%{transform:translateY(-12px);filter:drop-shadow(0 0 35px rgba(212,168,67,0.9))}
+}
+
+.landing-eyebrow{
+  font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.2rem;
+  animation:slideDown 1s ease 0.2s both;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+.landing-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,9vw,5.5rem);
+  font-weight:300;
+  line-height:1.1;
+  color:var(--cream);
+  margin-bottom:0.6rem;
+  animation:slideDown 1s ease 0.4s both;
+}
+.landing-title em{
+  font-style:italic;
+  color:var(--gold-l);
+  display:block;
+}
+
+.landing-sub{
+  font-size:clamp(0.8rem,2.5vw,1rem);
+  letter-spacing:0.12em;
+  color:var(--text-m);
+  margin-bottom:3rem;
+  animation:slideDown 1s ease 0.6s both;
+}
+
+/* ─ BOXES ROW ─ */
+.boxes-row{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(1rem,4vw,2.5rem);
+  margin-bottom:2.5rem;
+  animation:slideDown 1s ease 0.8s both;
+}
+
+.gift-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  gap:0.5rem;cursor:pointer;
+  transition:transform 0.3s ease;
+}
+.gift-wrap:hover{transform:translateY(-6px) scale(1.04);}
+
+.gift-label{
+  font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;
+  opacity:0.5;transition:opacity 0.3s;
+}
+.gift-wrap:hover .gift-label{opacity:1;color:var(--gold-l);}
+
+/* SVG Box */
+.box-svg{
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+  transition:filter 0.3s ease;
+}
+.gift-wrap:hover .box-svg{
+  filter:drop-shadow(0 12px 32px rgba(212,168,67,0.4));
+}
+
+/* Bounce animation */
+.gift-wrap{animation:bob 2.5s ease-in-out infinite;}
+.gift-wrap:nth-child(2){animation-delay:0.5s;}
+.gift-wrap:nth-child(3){animation-delay:1s;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.gift-wrap:hover{animation:none;}
+
+.open-hint{
+  font-size:0.75rem;letter-spacing:0.2em;
+  color:var(--gold);text-transform:uppercase;
+  animation:pulse 2s ease-in-out infinite;
+  animation:slideDown 1s ease 1.2s both,pulse 2s ease-in-out 1.2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+
+/* ══════════════ BOX OPEN TRANSITION ══════════════ */
+.box-burst{
+  position:fixed;inset:0;z-index:900;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+}
+.box-burst.go{
+  animation:burst 0.8s ease forwards;
+}
+@keyframes burst{
+  0%{opacity:0;transform:scale(0.3)}
+  50%{opacity:1;transform:scale(1.1)}
+  100%{opacity:0;transform:scale(2.5)}
+}
+
+/* ══════════════ PAGE 1 — POEM NOTE ══════════════ */
+#page-box1{
+  background:linear-gradient(160deg,#0e1a2a 0%,#1a2840 40%,#0a1018 100%);
+  align-items:center;justify-content:center;
+  padding:3rem 1.5rem;
+}
+
+.back-btn{
+  position:absolute;top:1.5rem;left:1.5rem;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:50px;padding:0.5rem 1.2rem;
+  color:var(--text-m);font-size:0.75rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.3s ease;
+  font-family:'Josefin Sans',sans-serif;
+}
+.back-btn:hover{background:rgba(255,255,255,0.15);color:var(--cream);}
+
+.note-wrapper{
+  max-width:580px;width:100%;
+  background:linear-gradient(145deg,rgba(14,26,42,0.9),rgba(10,16,24,0.95));
+  border:1px solid rgba(100,160,220,0.25);
+  border-radius:24px;
+  padding:3rem 2.5rem;
+  position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5),inset 0 1px 0 rgba(100,160,220,0.15);
+}
+.note-wrapper::before{
+  content:'';position:absolute;inset:-1px;border-radius:25px;
+  background:linear-gradient(135deg,rgba(100,160,220,0.3),transparent 50%,rgba(100,180,220,0.15));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+
+.note-icon{font-size:2.5rem;margin-bottom:1rem;text-align:center;display:block;}
+.note-eyebrow{
+  font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:#7ab8e8;text-align:center;margin-bottom:1.5rem;
+}
+.note-body{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.1rem,2.5vw,1.35rem);
+  line-height:2;
+  color:var(--cream);
+  white-space:pre-line;
+  text-align:center;
+  font-style:italic;
+  font-weight:300;
+}
+.note-sig{
+  margin-top:2rem;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;
+  font-style:italic;
+  color:#7ab8e8;
+  text-align:right;
+}
+
+/* ══════════════ PAGE 2 — REASONS NOTE ══════════════ */
+#page-box2{
+  background:linear-gradient(150deg,#1a0a00 0%,#2d1500 40%,#100800 100%);
+  align-items:center;justify-content:center;
+  padding:3rem 1.5rem;
+}
+
+.reasons-wrapper{
+  max-width:600px;width:100%;
+  background:linear-gradient(145deg,rgba(42,20,0,0.9),rgba(20,10,0,0.95));
+  border:1px solid rgba(212,168,67,0.25);
+  border-radius:24px;
+  padding:3rem 2.5rem;
+  position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5),inset 0 1px 0 rgba(212,168,67,0.1);
+}
+.reasons-wrapper::before{
+  content:'';position:absolute;inset:-1px;border-radius:25px;
+  background:linear-gradient(135deg,rgba(212,168,67,0.35),transparent 50%,rgba(212,168,67,0.15));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+
+.reasons-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,4vw,2.2rem);
+  font-weight:300;font-style:italic;
+  color:var(--gold-l);
+  text-align:center;
+  margin-bottom:0.4rem;
+}
+.reasons-sub{
+  text-align:center;font-size:0.7rem;letter-spacing:0.2em;
+  color:var(--gold-d);text-transform:uppercase;margin-bottom:2rem;
+}
+.reason-item{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:0.9rem 0;
+  border-bottom:1px solid rgba(212,168,67,0.1);
+}
+.reason-item:last-child{border-bottom:none;}
+.reason-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem;font-weight:600;
+  color:rgba(212,168,67,0.3);
+  line-height:1;min-width:2rem;
+}
+.reason-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;line-height:1.7;
+  color:var(--cream);font-style:italic;font-weight:300;
+  padding-top:0.2rem;
+}
+
+/* ══════════════ PAGE 3 — BALLOON PHOTOS ══════════════ */
+#page-box3{
+  background:linear-gradient(160deg,#1a0f26 0%,#2a1540 50%,#0d0818 100%);
+  align-items:center;justify-content:center;
+  padding:2rem 1.5rem;
+  flex-direction:column;
+  gap:0;
+}
+
+.balloon-page-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,5vw,2.5rem);
+  font-weight:300;font-style:italic;
+  color:var(--lavender);
+  text-align:center;
+  margin-bottom:0.3rem;
+}
+.balloon-page-sub{
+  font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:rgba(200,168,216,0.5);
+  margin-bottom:2.5rem;text-align:center;
+}
+
+/* Balloons area */
+.balloons-field{
+  display:flex;flex-wrap:wrap;
+  align-items:flex-end;justify-content:center;
+  gap:clamp(1rem,3vw,2rem);
+  width:100%;max-width:700px;
+  padding:1rem 0 2rem;
+  position:relative;
+}
+
+.balloon-btn{
+  display:flex;flex-direction:column;align-items:center;
+  cursor:pointer;position:relative;
+  transition:transform 0.3s ease;
+  animation:balloonBob 3s ease-in-out infinite;
+  user-select:none;
+}
+.balloon-btn:nth-child(2){animation-delay:0.4s;}
+.balloon-btn:nth-child(3){animation-delay:0.8s;}
+.balloon-btn:nth-child(4){animation-delay:0.5s;}
+.balloon-btn:nth-child(5){animation-delay:0.9s;}
+.balloon-btn:nth-child(6){animation-delay:0.2s;}
+@keyframes balloonBob{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-14px) rotate(2deg)}
+}
+.balloon-btn:hover{animation:none;transform:scale(1.12) translateY(-6px);}
+.balloon-btn.popped{
+  animation:popOut 0.5s ease forwards !important;
+  pointer-events:none;
+}
+@keyframes popOut{
+  0%{transform:scale(1);opacity:1}
+  30%{transform:scale(1.4);opacity:1}
+  100%{transform:scale(0);opacity:0}
+}
+
+.balloon-svg{filter:drop-shadow(0 8px 20px rgba(0,0,0,0.4));}
+.balloon-label{
+  font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:rgba(255,255,255,0.4);margin-top:0.3rem;
+}
+.balloon-string{
+  width:2px;height:clamp(30px,5vw,50px);
+  background:rgba(255,255,255,0.25);
+  margin-bottom:0.2rem;
+  border-radius:1px;
+}
+
+/* ─ Photo Modal ─ */
+#photo-modal{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(0,0,0,0.0);
+  align-items:center;justify-content:center;
+  padding:1.5rem;
+  transition:background 0.5s ease;
+}
+#photo-modal.open{
+  display:flex;
+  background:rgba(0,0,0,0.85);
+  animation:modalFadeIn 0.5s ease forwards;
+}
+@keyframes modalFadeIn{from{background:rgba(0,0,0,0)}to{background:rgba(0,0,0,0.85)}}
+
+.photo-card{
+  background:var(--bg2);
+  border:1px solid rgba(200,168,216,0.2);
+  border-radius:20px;
+  overflow:hidden;
+  max-width:480px;width:100%;
+  box-shadow:0 40px 100px rgba(0,0,0,0.7);
+  animation:cardPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes cardPop{
+  from{transform:scale(0.5) translateY(40px);opacity:0}
+  to{transform:scale(1) translateY(0);opacity:1}
+}
+
+.photo-card-img{
+  width:100%;aspect-ratio:4/3;
+  object-fit:cover;display:block;
+  background:linear-gradient(135deg,var(--bg3),var(--bg));
+}
+
+.photo-card-placeholder{
+  width:100%;aspect-ratio:4/3;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(200,168,216,0.1),rgba(100,60,140,0.15));
+  gap:1rem;cursor:pointer;
+}
+.photo-card-placeholder .ph-icon{font-size:3rem;opacity:0.4;}
+.photo-card-placeholder .ph-text{
+  font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(200,168,216,0.5);
+}
+.photo-card-placeholder:hover{background:rgba(200,168,216,0.12);}
+
+.photo-card-body{
+  padding:1.5rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.photo-card-caption{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:1rem;
+  color:var(--lavender);font-weight:300;
+  flex:1;
+}
+.photo-card-close{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:50%;width:36px;height:36px;
+  color:var(--text-m);font-size:1rem;
+  cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;font-family:'Josefin Sans',sans-serif;
+}
+.photo-card-close:hover{background:rgba(255,255,255,0.18);color:white;}
+
+/* Upload input */
+input[type=file]{display:none;}
+
+/* Upload btn inside card */
+.upload-btn{
+  display:block;width:calc(100% - 3rem);margin:0 1.5rem 1.5rem;
+  background:linear-gradient(135deg,rgba(200,168,216,0.2),rgba(150,100,200,0.2));
+  border:1px solid rgba(200,168,216,0.3);
+  border-radius:10px;padding:0.7rem;
+  color:var(--lavender);font-size:0.75rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.3s;text-align:center;
+  font-family:'Josefin Sans',sans-serif;
+}
+.upload-btn:hover{background:rgba(200,168,216,0.25);border-color:rgba(200,168,216,0.5);}
+
+/* ══════════════ POP PARTICLES ══════════════ */
+.pop-particle{
+  position:fixed;pointer-events:none;z-index:999;
+  border-radius:50%;
+  animation:particleFly linear forwards;
+}
+@keyframes particleFly{
+  0%{opacity:1;transform:scale(1) translate(0,0)}
+  100%{opacity:0;transform:scale(0) translate(var(--tx),var(--ty))}
+}
+
+/* ══════════════ CONFETTI ══════════════ */
+.confetti{
+  position:fixed;top:-10px;pointer-events:none;z-index:997;
+  animation:confettiDrop linear forwards;
+}
+@keyframes confettiDrop{
+  0%{top:-10px;opacity:1;transform:rotate(0deg)translateX(0)}
+  100%{top:110vh;opacity:0;transform:rotate(540deg)translateX(var(--tx))}
+}
+
+/* ══════════════ UTILITY ══════════════ */
+.stagger-1{animation-delay:0.1s}
+.stagger-2{animation-delay:0.2s}
+.stagger-3{animation-delay:0.3s}
+.stagger-4{animation-delay:0.4s}
+.stagger-5{animation-delay:0.5s}
+
+.reveal{opacity:0;transform:translateY(20px);animation:revealUp 0.7s ease forwards;}
+@keyframes revealUp{to{opacity:1;transform:translateY(0)}}
+
+/* responsive */
+@media(max-width:480px){
+  .boxes-row{gap:1rem;}
+  .note-wrapper,.reasons-wrapper{padding:2rem 1.5rem;}
+  .balloons-field{gap:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Starfield -->
+<div class="stars"></div>
+
+<!-- Floating petals -->
+<div id="petals-container"></div>
+
+<!-- ════════════ PAGE: LANDING ════════════ -->
+<div class="page active fade-in" id="page-landing">
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1.5rem;text-align:center;">
+
+    <div class="landing-moon">🌸</div>
+
+    <p class="landing-eyebrow">A gift wrapped in love</p>
+
+    <h1 class="landing-title">
+      To the Woman<br><em>Who Made Me</em>
+    </h1>
+
+    <p class="landing-sub">Three little boxes hold something just for you, Mama</p>
+
+    <div class="boxes-row">
+
+      <!-- BOX 1 — Blue/Silver: Poem -->
+      <div class="gift-wrap" onclick="openBox(1)" title="Open me">
+        <svg class="box-svg" width="90" height="110" viewBox="0 0 90 110">
+          <!-- lid -->
+          <rect x="2" y="10" width="86" height="22" rx="5" fill="#1e3a5f"/>
+          <rect x="2" y="10" width="86" height="22" rx="5" fill="url(#b1lid)"/>
+          <!-- box -->
+          <rect x="6" y="30" width="78" height="70" rx="5" fill="#1a3050"/>
+          <rect x="6" y="30" width="78" height="70" rx="5" fill="url(#b1box)"/>
+          <!-- ribbon v -->
+          <rect x="38" y="30" width="14" height="70" rx="2" fill="#7ab8e8" opacity="0.5"/>
+          <!-- ribbon h on lid -->
+          <rect x="2" y="18" width="86" height="8" rx="2" fill="#7ab8e8" opacity="0.5"/>
+          <!-- bow loops -->
+          <ellipse cx="32" cy="10" rx="12" ry="7" fill="#a0d0f0" opacity="0.8" transform="rotate(-20,32,10)"/>
+          <ellipse cx="58" cy="10" rx="12" ry="7" fill="#a0d0f0" opacity="0.8" transform="rotate(20,58,10)"/>
+          <circle cx="45" cy="10" r="5" fill="#c8e8ff"/>
+          <!-- shine -->
+          <rect x="10" y="34" width="18" height="4" rx="2" fill="white" opacity="0.1"/>
+          <defs>
+            <linearGradient id="b1lid" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="white" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.1"/>
+            </linearGradient>
+            <linearGradient id="b1box" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="white" stop-opacity="0.08"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.15"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <p class="gift-label">A poem for you</p>
+      </div>
+
+      <!-- BOX 2 — Gold/Amber: Reasons -->
+      <div class="gift-wrap" onclick="openBox(2)" title="Open me">
+        <svg class="box-svg" width="110" height="135" viewBox="0 0 110 135">
+          <rect x="2" y="12" width="106" height="26" rx="6" fill="#3d2000"/>
+          <rect x="2" y="12" width="106" height="26" rx="6" fill="url(#b2lid)"/>
+          <rect x="6" y="36" width="98" height="88" rx="6" fill="#2d1800"/>
+          <rect x="6" y="36" width="98" height="88" rx="6" fill="url(#b2box)"/>
+          <!-- golden ribbon -->
+          <rect x="46" y="36" width="18" height="88" rx="2" fill="#d4a843" opacity="0.6"/>
+          <rect x="2" y="22" width="106" height="10" rx="2" fill="#d4a843" opacity="0.6"/>
+          <!-- bow -->
+          <ellipse cx="38" cy="12" rx="14" ry="8" fill="#f0cf85" opacity="0.85" transform="rotate(-25,38,12)"/>
+          <ellipse cx="72" cy="12" rx="14" ry="8" fill="#f0cf85" opacity="0.85" transform="rotate(25,72,12)"/>
+          <circle cx="55" cy="12" r="6" fill="#ffe0a0"/>
+          <rect x="12" y="40" width="22" height="5" rx="2" fill="white" opacity="0.08"/>
+          <defs>
+            <linearGradient id="b2lid" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0cf85" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.2"/>
+            </linearGradient>
+            <linearGradient id="b2box" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0cf85" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.2"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <p class="gift-label">Reasons I love you</p>
+      </div>
+
+      <!-- BOX 3 — Rose/Pink: Photos -->
+      <div class="gift-wrap" onclick="openBox(3)" title="Open me">
+        <svg class="box-svg" width="90" height="110" viewBox="0 0 90 110">
+          <rect x="2" y="10" width="86" height="22" rx="5" fill="#4a1020"/>
+          <rect x="2" y="10" width="86" height="22" rx="5" fill="url(#b3lid)"/>
+          <rect x="6" y="30" width="78" height="70" rx="5" fill="#3a0c1a"/>
+          <rect x="6" y="30" width="78" height="70" rx="5" fill="url(#b3box)"/>
+          <rect x="38" y="30" width="14" height="70" rx="2" fill="#e8607a" opacity="0.55"/>
+          <rect x="2" y="18" width="86" height="8" rx="2" fill="#e8607a" opacity="0.55"/>
+          <ellipse cx="32" cy="10" rx="12" ry="7" fill="#f9b8c4" opacity="0.85" transform="rotate(-20,32,10)"/>
+          <ellipse cx="58" cy="10" rx="12" ry="7" fill="#f9b8c4" opacity="0.85" transform="rotate(20,58,10)"/>
+          <circle cx="45" cy="10" r="5" fill="#ffcdd8"/>
+          <rect x="10" y="34" width="18" height="4" rx="2" fill="white" opacity="0.1"/>
+          <defs>
+            <linearGradient id="b3lid" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f9b8c4" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.15"/>
+            </linearGradient>
+            <linearGradient id="b3box" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f9b8c4" stop-opacity="0.1"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.2"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <p class="gift-label">Our memories</p>
+      </div>
+    </div>
+
+    <p class="open-hint">✦ Choose a box to open ✦</p>
+  </div>
+</div>
+
+<!-- ════════════ PAGE: BOX 1 — POEM ════════════ -->
+<div class="page" id="page-box1">
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1.5rem;">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+    <div class="note-wrapper">
+      <span class="note-icon">🌙</span>
+      <p class="note-eyebrow">✦ a poem for the woman who is my whole world ✦</p>
+      <div class="note-body">You were the first song I ever heard,
+long before I knew what music was.
+Your voice, a lullaby written into my bones,
+your hands — the first home I ever knew.
+
+You gave me roots so I could grow,
+and wings so I could leave —
+then loved me all the more
+each time I dared to fly.
+
+In every comfort I reach for,
+in every strength I somehow find,
+in every soft and certain place —
+Mama, you are there.
+
+No page is wide enough,
+no words are true enough,
+to hold what you mean to me.
+
+But know this, always —
+you are the poem
+my life keeps trying to write. 🌸</div>
+      <div class="note-sig">— written with love, for you 💙</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PAGE: BOX 2 — REASONS ════════════ -->
+<div class="page" id="page-box2">
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1.5rem;">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+    <div class="reasons-wrapper">
+      <h2 class="reasons-title">Why I Love You</h2>
+      <p class="reasons-sub">✦ just a few of a thousand reasons ✦</p>
+
+      <div class="reason-item reveal stagger-1">
+        <div class="reason-num">01</div>
+        <div class="reason-text">Because even on your hardest days, you still made sure I was taken care of — never letting me feel the weight of your burdens.</div>
+      </div>
+      <div class="reason-item reveal stagger-2">
+        <div class="reason-num">02</div>
+        <div class="reason-text">Because your hugs have always felt like the safest place on earth. No bad day could survive them.</div>
+      </div>
+      <div class="reason-item reveal stagger-3">
+        <div class="reason-num">03</div>
+        <div class="reason-text">Because you believed in me long before I believed in myself — and kept believing even when I stopped.</div>
+      </div>
+      <div class="reason-item reveal stagger-4">
+        <div class="reason-num">04</div>
+        <div class="reason-text">Because your laughter is the most beautiful sound, and making you laugh is still my favourite thing to do.</div>
+      </div>
+      <div class="reason-item reveal stagger-5">
+        <div class="reason-num">05</div>
+        <div class="reason-text">Because everything good in me — every kindness, every patience, every warmth — I learned by watching you. 🌻</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PAGE: BOX 3 — BALLOONS & PHOTOS ════════════ -->
+<div class="page" id="page-box3">
+  <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1.5rem;width:100%;">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+    <h2 class="balloon-page-title">Pop a Balloon 🎈</h2>
+    <p class="balloon-page-sub">Each one hides a memory — pop them one by one</p>
+
+    <div class="balloons-field" id="balloons-field">
+      <!-- 6 balloons, each a different colour -->
+      <!-- Balloon 1 — Rose -->
+      <div class="balloon-btn" id="bal-0" onclick="popBalloon(0)">
+        <svg class="balloon-svg" width="70" height="100" viewBox="0 0 70 100">
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="#e8607a"/>
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="url(#sh0)"/>
+          <ellipse cx="24" cy="28" rx="8" ry="6" fill="white" opacity="0.25" transform="rotate(-20,24,28)"/>
+          <polygon points="32,78 38,78 35,86" fill="#e8607a"/>
+          <defs><radialGradient id="sh0" cx="40%" cy="35%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="black" stop-opacity="0.2"/></radialGradient></defs>
+        </svg>
+        <div class="balloon-string"></div>
+        <div class="balloon-label">Memory 1</div>
+      </div>
+
+      <!-- Balloon 2 — Lavender -->
+      <div class="balloon-btn" id="bal-1" onclick="popBalloon(1)">
+        <svg class="balloon-svg" width="70" height="100" viewBox="0 0 70 100">
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="#b07ad0"/>
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="url(#sh1)"/>
+          <ellipse cx="24" cy="28" rx="8" ry="6" fill="white" opacity="0.25" transform="rotate(-20,24,28)"/>
+          <polygon points="32,78 38,78 35,86" fill="#b07ad0"/>
+          <defs><radialGradient id="sh1" cx="40%" cy="35%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="black" stop-opacity="0.2"/></radialGradient></defs>
+        </svg>
+        <div class="balloon-string"></div>
+        <div class="balloon-label">Memory 2</div>
+      </div>
+
+      <!-- Balloon 3 — Gold -->
+      <div class="balloon-btn" id="bal-2" onclick="popBalloon(2)">
+        <svg class="balloon-svg" width="70" height="100" viewBox="0 0 70 100">
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="#d4a843"/>
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="url(#sh2)"/>
+          <ellipse cx="24" cy="28" rx="8" ry="6" fill="white" opacity="0.25" transform="rotate(-20,24,28)"/>
+          <polygon points="32,78 38,78 35,86" fill="#d4a843"/>
+          <defs><radialGradient id="sh2" cx="40%" cy="35%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="black" stop-opacity="0.2"/></radialGradient></defs>
+        </svg>
+        <div class="balloon-string"></div>
+        <div class="balloon-label">Memory 3</div>
+      </div>
+
+      <!-- Balloon 4 — Mint -->
+      <div class="balloon-btn" id="bal-3" onclick="popBalloon(3)">
+        <svg class="balloon-svg" width="70" height="100" viewBox="0 0 70 100">
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="#4dbfa8"/>
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="url(#sh3)"/>
+          <ellipse cx="24" cy="28" rx="8" ry="6" fill="white" opacity="0.25" transform="rotate(-20,24,28)"/>
+          <polygon points="32,78 38,78 35,86" fill="#4dbfa8"/>
+          <defs><radialGradient id="sh3" cx="40%" cy="35%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="black" stop-opacity="0.2"/></radialGradient></defs>
+        </svg>
+        <div class="balloon-string"></div>
+        <div class="balloon-label">Memory 4</div>
+      </div>
+
+      <!-- Balloon 5 — Coral -->
+      <div class="balloon-btn" id="bal-4" onclick="popBalloon(4)">
+        <svg class="balloon-svg" width="70" height="100" viewBox="0 0 70 100">
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="#e8845a"/>
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="url(#sh4)"/>
+          <ellipse cx="24" cy="28" rx="8" ry="6" fill="white" opacity="0.25" transform="rotate(-20,24,28)"/>
+          <polygon points="32,78 38,78 35,86" fill="#e8845a"/>
+          <defs><radialGradient id="sh4" cx="40%" cy="35%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="black" stop-opacity="0.2"/></radialGradient></defs>
+        </svg>
+        <div class="balloon-string"></div>
+        <div class="balloon-label">Memory 5</div>
+      </div>
+
+      <!-- Balloon 6 — Sky Blue -->
+      <div class="balloon-btn" id="bal-5" onclick="popBalloon(5)">
+        <svg class="balloon-svg" width="70" height="100" viewBox="0 0 70 100">
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="#5aaae8"/>
+          <ellipse cx="35" cy="42" rx="30" ry="38" fill="url(#sh5)"/>
+          <ellipse cx="24" cy="28" rx="8" ry="6" fill="white" opacity="0.25" transform="rotate(-20,24,28)"/>
+          <polygon points="32,78 38,78 35,86" fill="#5aaae8"/>
+          <defs><radialGradient id="sh5" cx="40%" cy="35%"><stop offset="0%" stop-color="white" stop-opacity="0.3"/><stop offset="100%" stop-color="black" stop-opacity="0.2"/></radialGradient></defs>
+        </svg>
+        <div class="balloon-string"></div>
+        <div class="balloon-label">Memory 6</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PHOTO MODAL ════════════ -->
+<div id="photo-modal">
+  <div class="photo-card" id="photo-card" onclick="event.stopPropagation()">
+    <div id="photo-display"></div>
+    <div class="photo-card-body">
+      <div class="photo-card-caption" id="photo-caption">A beautiful memory 🌸</div>
+      <button class="photo-card-close" onclick="closePhotoModal()">✕</button>
+    </div>
+    <button class="upload-btn" id="upload-btn-modal">📷 Add your photo here</button>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept="image/*">
+
+<script>
+// ── State ──
+// Photos are stored in localStorage as base64 so they persist forever
+// across sessions, page closes, and browser restarts.
+const STORAGE_KEY = 'mday_photos_v1';
+const captions = [
+  'A memory just for us 🌸',
+  'You & me, always 💜',
+  'Shining like gold ✨',
+  'Growing together 🌿',
+  'Warmth you always give 🧡',
+  'My favourite sky 💙'
+];
+let currentBalloon = -1;
+let activePage = 'page-landing';
+
+// Load saved photos from localStorage (returns array of 6, each null or base64 string)
+function loadPhotos(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed) && parsed.length === 6) return parsed;
+    }
+  } catch(e){}
+  return [null,null,null,null,null,null];
+}
+
+// Save photos array to localStorage
+function savePhotos(arr){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+  catch(e){ alert('Storage full — try a smaller photo!'); }
+}
+
+const photos = loadPhotos();
+
+// Mark balloons that already have photos (show a subtle glow)
+function refreshBalloonStates(){
+  photos.forEach((p, i)=>{
+    const btn = document.getElementById('bal-'+i);
+    if(!btn) return;
+    if(p){
+      btn.style.filter = 'drop-shadow(0 0 12px rgba(255,255,255,0.5))';
+      btn.querySelector('.balloon-label').textContent = '✓ Memory '+(i+1);
+    } else {
+      btn.style.filter = '';
+      btn.querySelector('.balloon-label').textContent = 'Memory '+(i+1);
+    }
+    // make sure popped balloons that were re-visited still look normal
+    btn.classList.remove('popped');
+  });
+}
+
+// ── Petals ──
+(function spawnPetals(){
+  const petals = ['🌸','🌹','🌷','✿','❀'];
+  const cont = document.getElementById('petals-container');
+  setInterval(()=>{
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random()*petals.length)];
+    p.style.left = Math.random()*100+'vw';
+    p.style.fontSize = (0.8+Math.random()*0.8)+'rem';
+    const dur = 8+Math.random()*8;
+    p.style.animationDuration = dur+'s';
+    p.style.animationDelay = Math.random()*2+'s';
+    cont.appendChild(p);
+    setTimeout(()=>p.remove(),(dur+2)*1000);
+  },1200);
+})();
+
+// ── Page navigation ──
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.remove('active','fade-in');
+  });
+  const page = document.getElementById(id);
+  page.classList.add('active');
+  requestAnimationFrame(()=>page.classList.add('fade-in'));
+  activePage = id;
+
+  // trigger reveal animations
+  if(id==='page-box2'){
+    page.querySelectorAll('.reveal').forEach(el=>{
+      el.style.animationPlayState='running';
+    });
+  }
+  if(id==='page-box3'){
+    refreshBalloonStates();
+  }
+}
+
+function goBack(){ showPage('page-landing'); }
+
+// ── Open Box ──
+function openBox(n){
+  // confetti burst
+  launchConfetti(40);
+  launchPopParticles(window.innerWidth/2, window.innerHeight/2, n===1?'#7ab8e8':n===2?'#d4a843':'#e8607a');
+
+  setTimeout(()=>{
+    if(n===1) showPage('page-box1');
+    else if(n===2) showPage('page-box2');
+    else showPage('page-box3');
+  }, 400);
+}
+
+// ── Pop Balloon ──
+function popBalloon(idx){
+  currentBalloon = idx;
+  const btn = document.getElementById('bal-'+idx);
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+
+  // pop animation — temporary
+  btn.classList.add('popped');
+  launchPopParticles(cx, cy, ['#e8607a','#b07ad0','#d4a843','#4dbfa8','#e8845a','#5aaae8'][idx]);
+
+  // show photo modal after pop
+  setTimeout(()=>openPhotoModal(idx), 350);
+
+  // restore balloon after modal (so it can be re-opened)
+  setTimeout(()=>btn.classList.remove('popped'), 900);
+}
+
+// ── Photo Modal ──
+function openPhotoModal(idx){
+  const modal = document.getElementById('photo-modal');
+  const display = document.getElementById('photo-display');
+  const caption = document.getElementById('photo-caption');
+  const uploadBtn = document.getElementById('upload-btn-modal');
+
+  caption.textContent = captions[idx];
+
+  if(photos[idx]){
+    display.innerHTML = `<img src="${photos[idx]}" class="photo-card-img" alt="memory">`;
+    uploadBtn.textContent = '📷 Change photo';
+  } else {
+    display.innerHTML = `
+      <div class="photo-card-placeholder" onclick="document.getElementById('file-input').click()">
+        <div class="ph-icon">🎈</div>
+        <div class="ph-text">Tap to add your photo</div>
+      </div>`;
+    uploadBtn.textContent = '📷 Add your photo here';
+  }
+
+  uploadBtn.onclick = ()=>document.getElementById('file-input').click();
+
+  // Re-animate card
+  const card = document.getElementById('photo-card');
+  card.style.animation='none';
+  requestAnimationFrame(()=>{
+    card.style.animation='';
+    card.style.animationName='cardPop';
+  });
+
+  modal.classList.add('open');
+}
+
+function closePhotoModal(){
+  document.getElementById('photo-modal').classList.remove('open');
+}
+document.getElementById('photo-modal').addEventListener('click',closePhotoModal);
+
+// ── File Upload — saves as base64 to localStorage (permanent) ──
+document.getElementById('file-input').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file || currentBalloon < 0) return;
+
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const base64 = ev.target.result; // full data URL, e.g. "data:image/jpeg;base64,..."
+    photos[currentBalloon] = base64;
+    savePhotos(photos);
+
+    // update modal display immediately
+    document.getElementById('photo-display').innerHTML =
+      `<img src="${base64}" class="photo-card-img" alt="memory">`;
+    document.getElementById('upload-btn-modal').textContent = '📷 Change photo';
+
+    // update balloon glow
+    refreshBalloonStates();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+// ── Pop Particles ──
+function launchPopParticles(cx, cy, color){
+  const colors = [color, '#fff', '#ffd', color+'aa'];
+  for(let i=0;i<16;i++){
+    const p = document.createElement('div');
+    p.className = 'pop-particle';
+    const angle = (i/16)*Math.PI*2;
+    const dist = 60+Math.random()*80;
+    p.style.cssText = `
+      left:${cx}px;top:${cy}px;
+      width:${4+Math.random()*6}px;
+      height:${4+Math.random()*6}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      --tx:${Math.cos(angle)*dist}px;
+      --ty:${Math.sin(angle)*dist}px;
+      animation-duration:${0.5+Math.random()*0.4}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1000);
+  }
+}
+
+// ── Confetti ──
+function launchConfetti(n){
+  const cols=['#e8607a','#d4a843','#b07ad0','#4dbfa8','#e8845a','#5aaae8','#fdf6ee'];
+  for(let i=0;i<n;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');
+      c.className='confetti';
+      c.style.cssText=`
+        left:${Math.random()*100}vw;
+        width:${6+Math.random()*8}px;
+        height:${6+Math.random()*8}px;
+        background:${cols[Math.floor(Math.random()*cols.length)]};
+        border-radius:${Math.random()>0.5?'50%':'2px'};
+        --tx:${-40+Math.random()*80}px;
+        animation-duration:${2+Math.random()*2}s;
+        transform:rotate(${Math.random()*360}deg);
+      `;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),4000);
+    },i*50);
+  }
+}
+</script>
+</body>
+</html>
