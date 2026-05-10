@@ -903,6 +903,14 @@ a.setup-link:hover{text-decoration:underline;}
     </div>
 
     <p class="open-hint">✦ Choose a box to open ✦</p>
+
+    <button onclick="showChangeUrlPanel()" title="Firebase settings"
+      style="position:fixed;bottom:1.2rem;right:1.2rem;
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+      border-radius:50%;width:36px;height:36px;color:rgba(253,246,238,0.25);
+      font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:all 0.3s;z-index:10" onmouseover="this.style.color='rgba(253,246,238,0.6)'"
+      onmouseout="this.style.color='rgba(253,246,238,0.25)'">⚙</button>
   </div>
 </div>
 
@@ -1247,11 +1255,9 @@ async function savePhoto(idx, base64){
 
   // 1. Always save to localStorage first (immediate, reliable)
   try {
-    // Clear old slot first to free space before writing new data
     localStorage.removeItem('mday_photo_'+idx);
     localStorage.setItem('mday_photo_'+idx, base64);
   } catch(e){
-    console.warn('localStorage full for photo '+idx, e);
     showToast('⚠️ Storage full — try a smaller photo');
     setTimeout(()=>hideToast(), 3000);
     return;
@@ -1259,23 +1265,161 @@ async function savePhoto(idx, base64){
 
   // 2. Also push to Firebase if configured
   if(firebaseUrl){
-    try {
-      const res = await fetch(firebaseUrl + FB_PATH + '/' + idx + '.json', {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(base64)
-      });
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      showToast('✓ Memory saved!');
-    } catch(e){
-      console.warn('Firebase save failed:', e);
-      showToast('Saved on this device only');
+    const ok = await pushToFirebase(idx, base64);
+    if(ok){
+      showToast('✓ Saved to all devices!');
+    } else {
+      showToast('⚠️ Saved this device only — see Fix button');
+      showFirebaseError();
     }
   } else {
     showToast('✓ Memory saved!');
   }
 
-  setTimeout(()=>hideToast(), 2000);
+  setTimeout(()=>hideToast(), 3000);
+}
+
+async function pushToFirebase(idx, data){
+  try {
+    const url = firebaseUrl + FB_PATH + '/' + idx + '.json';
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    if(!res.ok){
+      const errText = await res.text().catch(()=>'');
+      console.warn('Firebase PUT failed:', res.status, errText);
+      lastFirebaseError = 'HTTP ' + res.status + (errText ? ': ' + errText.slice(0,120) : '');
+      return false;
+    }
+    lastFirebaseError = '';
+    return true;
+  } catch(e){
+    console.warn('Firebase network error:', e);
+    lastFirebaseError = e.message || 'Network error';
+    return false;
+  }
+}
+
+let lastFirebaseError = '';
+
+function showFirebaseError(){
+  const existing = document.getElementById('fb-error-banner');
+  if(existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'fb-error-banner';
+  banner.style.cssText = `
+    position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);
+    background:#2a0808;border:1px solid #c03030;border-radius:14px;
+    padding:1rem 1.4rem;max-width:420px;width:90%;z-index:9998;
+    font-family:'Josefin Sans',sans-serif;font-size:0.75rem;line-height:1.7;
+    color:#ffaaaa;
+  `;
+
+  let fix = '';
+  const err = lastFirebaseError.toLowerCase();
+
+  if(err.includes('401') || err.includes('403') || err.includes('permission') || err.includes('unauthorized')){
+    fix = `<strong style="color:#ff6666">Fix:</strong> Your Firebase rules are blocking writes.<br>
+      Go to <strong>Firebase Console → Realtime Database → Rules</strong> and set:<br>
+      <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px">
+      { "rules": { ".read": true, ".write": true } }
+      </code><br>then click <strong>Publish</strong>.`;
+  } else if(err.includes('404')){
+    fix = `<strong style="color:#ff6666">Fix:</strong> Database URL seems wrong.<br>Click below to update it.`;
+  } else if(err.includes('network') || err.includes('failed to fetch')){
+    fix = `<strong style="color:#ff6666">Fix:</strong> No internet connection when saving. The photo is saved on this device. It will sync next time.`;
+  } else {
+    fix = `<strong style="color:#ff6666">Error:</strong> ${lastFirebaseError}<br>Try updating your Firebase URL below.`;
+  }
+
+  banner.innerHTML = `
+    <div style="margin-bottom:0.6rem">${fix}</div>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+      <button onclick="document.getElementById('fb-error-banner').remove()"
+        style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+        border-radius:8px;padding:0.4rem 0.9rem;color:#ffaaaa;cursor:pointer;
+        font-family:inherit;font-size:0.72rem">Dismiss</button>
+      <button onclick="showChangeUrlPanel();document.getElementById('fb-error-banner').remove()"
+        style="background:rgba(200,100,100,0.2);border:1px solid rgba(200,100,100,0.4);
+        border-radius:8px;padding:0.4rem 0.9rem;color:#ffcccc;cursor:pointer;
+        font-family:inherit;font-size:0.72rem">Update Firebase URL</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+}
+
+// ── Panel to change Firebase URL without console ──
+function showChangeUrlPanel(){
+  const existing = document.getElementById('change-url-panel');
+  if(existing){ existing.remove(); return; }
+
+  const panel = document.createElement('div');
+  panel.id = 'change-url-panel';
+  panel.style.cssText = `
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(5,2,8,0.95);
+    display:flex;align-items:center;justify-content:center;padding:2rem;
+  `;
+  panel.innerHTML = `
+    <div style="max-width:480px;width:100%;background:linear-gradient(145deg,#2a1020,#1a0a12);
+      border:1px solid rgba(212,168,67,0.3);border-radius:20px;padding:2rem;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;
+        font-weight:300;color:#f0cf85;margin-bottom:0.5rem">Update Firebase URL</h3>
+      <p style="font-size:0.75rem;color:rgba(253,246,238,0.55);margin-bottom:1.2rem;line-height:1.7">
+        Current: <code style="color:#c8a8d8;word-break:break-all">${firebaseUrl || '(none)'}</code>
+      </p>
+      <p style="font-size:0.72rem;color:rgba(253,246,238,0.45);margin-bottom:1rem;line-height:1.6">
+        Also make sure your Firebase Rules allow read/write:<br>
+        <code style="background:rgba(255,255,255,0.07);padding:3px 8px;border-radius:4px;display:inline-block;margin-top:4px;color:#c8a8d8">
+        { "rules": { ".read": true, ".write": true } }
+        </code>
+      </p>
+      <input id="new-fb-url" type="url" placeholder="https://your-project-default-rtdb.firebaseio.com"
+        style="width:100%;padding:0.75rem 1rem;background:rgba(255,255,255,0.05);
+        border:1px solid rgba(212,168,67,0.3);border-radius:10px;color:#fdf6ee;
+        font-size:0.85rem;font-family:'Josefin Sans',sans-serif;outline:none;margin-bottom:0.8rem;"
+        value="${firebaseUrl || ''}">
+      <div style="display:flex;gap:0.7rem">
+        <button onclick="document.getElementById('change-url-panel').remove()"
+          style="flex:0 0 auto;padding:0.7rem 1.2rem;background:rgba(255,255,255,0.05);
+          border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(253,246,238,0.5);
+          cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:0.75rem">Cancel</button>
+        <button onclick="applyNewFirebaseUrl()"
+          style="flex:1;padding:0.7rem;background:rgba(212,168,67,0.2);
+          border:1px solid rgba(212,168,67,0.4);border-radius:10px;color:#f0cf85;
+          cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:0.75rem;
+          letter-spacing:0.15em;text-transform:uppercase">Save URL</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(panel);
+}
+
+function applyNewFirebaseUrl(){
+  const val = document.getElementById('new-fb-url').value.trim().replace(/\/$/,'');
+  if(!val || !val.startsWith('https://')){
+    alert('Please enter a valid URL starting with https://');
+    return;
+  }
+  firebaseUrl = val;
+  localStorage.setItem(FB_URL_KEY, val);
+  document.getElementById('change-url-panel').remove();
+  showToast('URL updated — retrying save…');
+  // Re-push all existing photos to new URL
+  setTimeout(async ()=>{
+    let allOk = true;
+    for(let i=0;i<6;i++){
+      if(photos[i]){
+        const ok = await pushToFirebase(i, photos[i]);
+        if(!ok) allOk = false;
+      }
+    }
+    showToast(allOk ? '✓ All memories synced!' : '⚠️ Some photos failed — check rules');
+    setTimeout(()=>hideToast(), 3000);
+  }, 300);
 }
 
 // ══════════════════════════════════════════
