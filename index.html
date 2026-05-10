@@ -1141,9 +1141,10 @@ could ever quite hold. 🌼</div>
 // ══════════════════════════════════════════
 // CONFIGURATION
 // ══════════════════════════════════════════
-const STORAGE_KEY   = 'mday_photos_v1';
-const FB_URL_KEY    = 'mday_firebase_url';
-const FB_PATH       = '/mday_photos.json'; // path inside your Firebase RTDB
+// Each photo stored separately: mday_photo_0 … mday_photo_5
+// This avoids hitting localStorage limits by keeping writes small & individual.
+const FB_URL_KEY = 'mday_firebase_url';
+const FB_PATH    = '/mday_photos';  // Firebase RTDB path (each photo at /mday_photos/0.json etc.)
 
 const captions = [
   'A memory just for us 🌸',
@@ -1156,7 +1157,7 @@ const captions = [
 
 let currentBalloon = -1;
 let activePage     = 'page-landing';
-let firebaseUrl    = localStorage.getItem(FB_URL_KEY) || '';
+let firebaseUrl    = '';
 
 // Photos array — 6 slots, each null or base64 string
 const photos = [null,null,null,null,null,null];
@@ -1165,13 +1166,14 @@ const photos = [null,null,null,null,null,null];
 // SETUP OVERLAY
 // ══════════════════════════════════════════
 function initSetup(){
-  // Already configured or skipped?
-  if(localStorage.getItem(FB_URL_KEY) !== null){
+  const saved = localStorage.getItem(FB_URL_KEY);
+  if(saved !== null){
+    // Already configured (even if empty string = localStorage-only mode)
+    firebaseUrl = saved;
     hideSetup();
-    loadPhotosFromCloud();
+    loadAllPhotos();
     return;
   }
-  // Show overlay
   document.getElementById('setup-overlay').style.display = 'flex';
 }
 
@@ -1184,15 +1186,14 @@ function saveFirebaseUrl(){
   firebaseUrl = input;
   localStorage.setItem(FB_URL_KEY, firebaseUrl);
   hideSetup();
-  loadPhotosFromCloud();
+  loadAllPhotos();
 }
 
 function skipSetup(){
-  // Use localStorage only — mark as skipped so overlay doesn't reappear
-  localStorage.setItem(FB_URL_KEY, '');
   firebaseUrl = '';
+  localStorage.setItem(FB_URL_KEY, '');
   hideSetup();
-  loadPhotosFromLocalStorage();
+  loadAllPhotos();
 }
 
 function hideSetup(){
@@ -1200,57 +1201,81 @@ function hideSetup(){
 }
 
 // ══════════════════════════════════════════
-// CLOUD STORAGE (Firebase Realtime DB)
+// LOAD — tries Firebase first, falls back to localStorage
 // ══════════════════════════════════════════
-async function loadPhotosFromCloud(){
-  if(!firebaseUrl){
-    loadPhotosFromLocalStorage();
+async function loadAllPhotos(){
+  if(firebaseUrl){
+    await loadFromFirebase();
+  } else {
+    loadFromLocalStorage();
+  }
+  refreshBalloonStates();
+}
+
+async function loadFromFirebase(){
+  try {
+    const res = await fetch(firebaseUrl + FB_PATH + '.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    if(data && typeof data === 'object'){
+      for(let i=0;i<6;i++){
+        if(data[i]) photos[i] = data[i];
+      }
+      return;
+    }
+  } catch(e){
+    console.warn('Firebase load failed, using localStorage:', e);
+  }
+  // Fallback to localStorage if Firebase failed
+  loadFromLocalStorage();
+}
+
+function loadFromLocalStorage(){
+  for(let i=0;i<6;i++){
+    try {
+      const val = localStorage.getItem('mday_photo_'+i);
+      if(val) photos[i] = val;
+    } catch(e){}
+  }
+}
+
+// ══════════════════════════════════════════
+// SAVE — saves one photo at a time to avoid size limits
+// ══════════════════════════════════════════
+async function savePhoto(idx, base64){
+  showToast('Saving memory…');
+
+  // 1. Always save to localStorage first (immediate, reliable)
+  try {
+    // Clear old slot first to free space before writing new data
+    localStorage.removeItem('mday_photo_'+idx);
+    localStorage.setItem('mday_photo_'+idx, base64);
+  } catch(e){
+    console.warn('localStorage full for photo '+idx, e);
+    showToast('⚠️ Storage full — try a smaller photo');
+    setTimeout(()=>hideToast(), 3000);
     return;
   }
-  try {
-    const res = await fetch(firebaseUrl + FB_PATH);
-    if(res.ok){
-      const data = await res.json();
-      if(Array.isArray(data) && data.length === 6){
-        data.forEach((p,i) => photos[i] = p);
-      }
+
+  // 2. Also push to Firebase if configured
+  if(firebaseUrl){
+    try {
+      const res = await fetch(firebaseUrl + FB_PATH + '/' + idx + '.json', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(base64)
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      showToast('✓ Memory saved!');
+    } catch(e){
+      console.warn('Firebase save failed:', e);
+      showToast('Saved on this device only');
     }
-  } catch(e){
-    console.warn('Firebase load failed, falling back to localStorage', e);
-    loadPhotosFromLocalStorage();
+  } else {
+    showToast('✓ Memory saved!');
   }
-  refreshBalloonStates();
-}
 
-async function savePhotosToCloud(){
-  showToast('Saving memory…');
-  // Always save to localStorage as backup
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(photos)); } catch(e){}
-
-  if(!firebaseUrl){ hideToast(); return; }
-  try {
-    await fetch(firebaseUrl + FB_PATH, {
-      method: 'PUT',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(photos)
-    });
-  } catch(e){
-    console.warn('Firebase save failed', e);
-  }
-  hideToast();
-}
-
-function loadPhotosFromLocalStorage(){
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      const parsed = JSON.parse(raw);
-      if(Array.isArray(parsed) && parsed.length === 6){
-        parsed.forEach((p,i) => photos[i] = p);
-      }
-    }
-  } catch(e){}
-  refreshBalloonStates();
+  setTimeout(()=>hideToast(), 2000);
 }
 
 // ══════════════════════════════════════════
@@ -1266,7 +1291,7 @@ function hideToast(){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>{
     document.getElementById('saving-toast').classList.remove('show');
-  }, 1200);
+  }, 300);
 }
 
 // ══════════════════════════════════════════
@@ -1615,27 +1640,24 @@ edCanvas.addEventListener('wheel', e=>{
   drawEditor();
 },{passive:false});
 
-// ── Confirm: export canvas as JPEG and save ──
+// ── Confirm: export canvas as compressed JPEG and save ──
 function confirmPhoto(){
   const canvas = document.getElementById('editor-canvas');
-  // Export at 800px wide max for storage efficiency
-  const OUT_W = 800, OUT_H = 600;
+
+  // Export small enough to fit in localStorage (target ~100KB per photo)
+  // 480×360 at 0.75 quality ≈ 60–120KB — well within limits for 6 photos
+  const OUT_W = 480, OUT_H = 360;
   const out = document.createElement('canvas');
-  out.width=OUT_W; out.height=OUT_H;
-  const octx = out.getContext('2d');
+  out.width = OUT_W; out.height = OUT_H;
+  out.getContext('2d').drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, OUT_W, OUT_H);
 
-  // Scale from editor canvas to output
-  const scaleX = OUT_W / canvas.width;
-  const scaleY = OUT_H / canvas.height;
-  octx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, OUT_W, OUT_H);
-
-  const base64 = out.toDataURL('image/jpeg', 0.85);
+  const base64 = out.toDataURL('image/jpeg', 0.75);
   closeEditor();
 
   photos[currentBalloon] = base64;
-  savePhotosToCloud();
+  savePhoto(currentBalloon, base64); // async — saves to localStorage + Firebase
 
-  // Update modal display
+  // Update modal display immediately
   document.getElementById('photo-display').innerHTML =
     `<img src="${base64}" class="photo-card-img" alt="memory">`;
   const btn = document.getElementById('photo-card').querySelector('.upload-btn-first');
